@@ -26,3 +26,7 @@ more specific request, start at its "Start here" section and follow its goal
 loop. Record every session in [docs/IMPROVEMENT-LOG.md](docs/IMPROVEMENT-LOG.md).
 [sms-pc-port](https://github.com/chasem-dev/sms-pc-port) is a research
 reference only; do not copy its code.
+
+To compare SunPad with another Sunshine project or look for features to learn
+from, follow [docs/RESEARCH-LOOP.md](docs/RESEARCH-LOOP.md). Its source rules
+say what may be read and what may be reused.

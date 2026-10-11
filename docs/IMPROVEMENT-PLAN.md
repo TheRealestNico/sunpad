@@ -6,7 +6,8 @@
   (ModernGekko `8f49c55`, RecompCore `da96175`, DolRecomp `fa0cf61` on the Apple lane)
 - **Research inputs:** [sms-pc-port review](SMS-PC-PORT-REVIEW.md),
   [Apple performance research](APPLE-PERFORMANCE-RESEARCH.md),
-  [performance technical debt](TECH-DEBT.md)
+  [performance technical debt](TECH-DEBT.md),
+  [comparative research loop](RESEARCH-LOOP.md)
 - **Run log:** [IMPROVEMENT-LOG.md](IMPROVEMENT-LOG.md)
 
 This plan makes SunPad faster on older hardware and safer with saves without
@@ -41,8 +42,12 @@ specific request.
 - Leave the repositories with no unpushed work. If a human step is next, write
   exactly what the human needs to do in the log entry's `Next:` line.
 
-**Two tasks can start immediately:** 1.1 (save fault test, RecompCore) and 2.1
-(symbol map script, SunPad). They do not depend on each other.
+**These tasks can start immediately:** 1.1 (save fault test, RecompCore), 2.1
+(symbol map script, SunPad) and the pass 10 player features 10.1-10.3 (SunPad
+app code, with a device session at the end). None depends on another.
+
+When asked to compare SunPad with another Sunshine project or to look for
+features to learn from, run the [research loop](RESEARCH-LOOP.md) instead.
 
 **Releases are paused.** [AGENTS.md](../AGENTS.md) forbids publishing or
 restoring any release, IPA or download link until the maintainer's release
@@ -62,6 +67,9 @@ build for testing only.
    function, from a repeatable route.
 4. **Then add features** the extra headroom pays for: HD texture packs, a real
    60 FPS mode for Macs and M-series iPads, and widescreen polish.
+5. **Close cheap player-facing gaps** that the
+   [research loop](RESEARCH-LOOP.md) finds and that need no extra headroom
+   (pass 10). These can run alongside the speed work.
 
 When goal 2 is met, stop optimizing. Do not keep shaving time once the target
 holds; move to goal 4 or to measured defects.
@@ -319,6 +327,9 @@ human for a device session or a hands-on verdict.
 | 8.1 | 60 FPS timing audit | ready | 4.1, headroom gate | S |
 | 8.2 | 60 FPS mod | ready | 8.1 | D, H |
 | 9.1 | Widescreen polish | ready | 8.2 or human approval | D, H |
+| 10.1 | Save import and export | ready | none | S, H |
+| 10.2 | Controller rumble on iPhone and iPad | ready | none | S, H |
+| 10.3 | Invert camera up and down | ready | none | S, H |
 
 ## Pass 1: save durability
 
@@ -616,12 +627,20 @@ of the community UHD pack (about 156 MB) on iPhone and iPad; the full UHD pack
 (986 MB download) on Mac only until measured. SunPad never bundles or downloads
 a pack. Gates: C1 with the setting off, C4 memory with it on, C5.
 
+**Loading findings from research pass 1.** sms-pc-port's texture-pack work
+(`a8669e0`) describes choices worth measuring on iOS rather than adopting:
+loading a level's replacements while the level loads (its default), loading
+each one at first draw (least memory), generating missing mipmap levels in the
+background at low priority with an on-disk cache, limiting uploads per frame,
+and drawing each new texture once during loading so the first gameplay frame
+does not stall. Record memory and first-frame time for each policy you try.
+
 ## Pass 8: real 60 FPS
 
 **Why.** The current 60 FPS Patch is a six-line Gecko code. It demotes two
 chunks to the interpreter and was judged unusable in hands-on play.
-sms-pc-port needed 35 game-side timing fixes beyond reporting the higher rate,
-which the Gecko code does not make.
+sms-pc-port needed 42 game-side frame-rate patches by `a8669e0` beyond
+reporting the higher rate, which the Gecko code does not make.
 
 **Worth trying.** On the target device at original 30 FPS, the game thread is
 busy no more than 50% of the time (60 FPS roughly doubles the work). Target
@@ -633,6 +652,12 @@ gates, console timers, flocks, grass and flag sway, rides, bosses, ripples,
 smoke, particles, sound frame work) and search the decompilation for counters
 compared against constants in `perform`/`control` methods. For each entry
 record function, address, what it counts and how it must change at 60 FPS.
+Research pass 1 adds two documented findings to check: explicit animation-rate
+overrides that need scaling (Petey's goop wind-up, Mecha Bowser, Hinokuri,
+Blooper's beak damage, Wiggler's walk, and script `linSetAnmRate`), and a
+Puffer that collides with its own trailing hitbox and explodes at high frame
+rates (`TPopo::calcRootMatrix`, `TPopo::isCollidMove`). Confirm each in the
+decompilation before listing it.
 
 **Task 8.2: 60 FPS mod (3-4 weeks).** In the SunPad mod: report the active rate
 from `SMSGetVSyncTimesPerSec`, keep movement on its 120 Hz ticks, and patch
@@ -647,6 +672,58 @@ written verdict per scene.
 fader, HUD panes kept 4:3 or anchored to edges) to fix SunPad's remaining 16:9
 defects, as mod patches. Gates: C1 in 4:3, C5 in the reported 16:9 scenes.
 
+## Pass 10: player features
+
+**Why.** [Research pass 1](RESEARCH-LOOP.md#inventory) found three gaps that
+players of other Sunshine projects already have and that SunPad can close in
+its own app code without new performance headroom.
+
+**Worth trying.** Always. Each task is small and changes no game code.
+
+**Task 10.1: save import and export (1 week).** SunPad keeps saves in
+`Library/Application Support/SunPad/GC/USA/Card A`, which Files cannot see,
+so players cannot back up a save, bring one from Dolphin or take theirs to
+another device. Dolphin's GCI-folder backend, which SunPad uses, keeps each save
+as a `.gci` file in the layout Dolphin's Memory Card Manager exports.
+
+1. Add "Import Dolphin Save (.gci)…" and "Export Saves…" to the
+   Game Data & Saves menu. Recheck the menu's other actions afterwards.
+2. Accept only GMSE01 saves: check the 64-byte header's game code and maker,
+   and that the file size matches its block count. Reject anything else with a
+   plain message; never modify the source file.
+3. Never write into the card folder while the game runs. Stage the import, ask
+   the player to close and reopen SunPad (as the aspect-ratio change does), and
+   apply it at the next launch before the core starts: copy the current card
+   folder to `SaveBackups/<date>-before-import/`, write the new file under a
+   temporary name, then rename it into place.
+4. Export copies the card folder's `.gci` files to a temporary folder and
+   shares them with the existing share sheet. Say that the export holds the last
+   save the game wrote.
+5. Never delete a backup automatically.
+
+Tests: header validation and the staged import, run against synthetic fixtures
+in a temporary folder. Never commit a real save. Gates: C1; C5 on the iPad:
+import a Dolphin save, play and save, export, and load the exported file in
+Dolphin, with save hashes recorded by the [device session](#device-session-protocol).
+Stop if Dolphin's GCI folder ignores or renames an imported file at boot, and
+record what it did.
+
+**Task 10.2: controller rumble on iPhone and iPad (2-4 days).** The Apple TV
+app forwards the game's rumble to the controller through Core Haptics
+(`SunPadTVSetRumble` in `apple/tvos/SunPadTVAppDelegate.mm`); the iOS app
+does not. Find where the tvOS runtime calls `SunPadTVSetRumble`, add the same
+call on the Apple lane in its owning fork, and move the Core Haptics player into
+`apple/shared` so both apps use one implementation. Add a "Controller Rumble"
+switch under Controls, off until C5 passes; the default is a human decision.
+Gates: C1; C5 with a controller that has haptics, covering damage and other
+moments that rumble on the GameCube.
+
+**Task 10.3: invert camera up and down (1-2 days).** SunPad offers only
+"Modern C-stick L/R". Add "Invert C-stick Up/Down" beside it, off by default,
+applied in `SunPadInputPipeEncoder` so controllers and touch behave the same.
+Extend `SunPadInputPipeEncoderTests`. Gates: C1; C5 with a controller and
+with touch.
+
 ## Schedule
 
 Effort is focused engineering time for one agent or maintainer. It excludes
@@ -658,6 +735,7 @@ waiting for device sessions.
 | 2 | 4-10 | 3.x and 4.x; 6.x in parallel if its entry gate passes | Faster module and runtime |
 | 3 | 11-13 | 5.x, full scene matrix on iPhone 14, iPhone 15 Pro and iPad | Internal candidate build with evidence (no public release while releases are paused) |
 | 4 | 14-22 | 7.1, 8.x, 9.1 | Optional features on hardware with headroom |
+| Any | 1-2 | 10.1-10.3 | Player features, alongside any phase |
 
 Each phase ends with merged, pinned and documented work, so the plan can stop
 after any phase.
@@ -682,15 +760,18 @@ A new task card needs one of:
 
 - a measured cost of at least 3% of game-thread time on a route, with the log
   entry that shows it; or
-- a reproduced player-visible defect with a log or capture.
+- a reproduced player-visible defect with a log or capture; or
+- a player-facing gap promoted by the [research loop](RESEARCH-LOOP.md), with
+  its behavior note, when it needs no extra performance headroom and ships
+  default-off or behind a setting.
 
 Write it with the same parts as the cards above: why, worth-trying rule, steps,
 tests, gates, estimate, stop rule. Add it to the status table. Ideas without
 measurements go to the log's "ideas" list, not the table.
 
-Check [sms-pc-port](https://github.com/chasem-dev/sms-pc-port) and sms-english
-for new findings at most once per phase. Add a finding only through the rules
-above, and update the review's revision line when you do.
+Look for new findings in [sms-pc-port](https://github.com/chasem-dev/sms-pc-port),
+SMS Launcher and sms-english through the [research loop](RESEARCH-LOOP.md),
+which records the revisions it read.
 
 ## Track 2: a decompilation-based Apple port
 

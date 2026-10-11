@@ -55,6 +55,17 @@ Unmeasured ideas. Promote one to a task card only through the plan's
 
 - Metal binary archives for known pipelines (from the performance research).
 - Hot-region LLVM objects for measured chunks (from the performance research).
+- Per-stage pipeline warmup during loads, from a recorded list of each stage's
+  pipelines (research pass 1; sms-pc-port compiles 849 programs over 41 stages
+  this way). Needs a first-moments hitch measurement on iPhone first.
+- Audio after slow frames: check whether SunPad's audio path replays or drops
+  blocks during sustained slowdowns, and whether a queue that grows after an
+  underrun helps (research pass 1; see AUDIO_ISSUE.md).
+- Heat-wave bypass that does not change code bytes, so it costs no chunk and
+  can become its own setting (research pass 1).
+- Button prompts that match the connected controller, using custom textures
+  with original artwork (research pass 1; needs task 7.1).
+- In-app "What's new" when releases resume (research pass 1).
 
 ## Entries
 
@@ -67,6 +78,16 @@ Notes: Symbol map hash matches the extracted main.dol. The pinned DolRecomp
   already inlines the FP-enabled check and has an opt-in direct-call path that
   is off. ModernGekko supports code mods, but SunPad does not set
   mod_directories. Dolphin's GCI folder writes saves in place.
+Next: task 1.1 and task 2.1 (independent).
+
+### 2026-10-07 plan: agent entry points
+Result: done
+Pins: unchanged
+Checkpoints: documentation only
+Evidence: AGENTS.md, CLAUDE.md, plan "Start here" section
+Notes: AGENTS.md now points agents to the plan; CLAUDE.md imports AGENTS.md so
+  Claude-based agents get the same instructions. The status table marks what
+  each task needs (source only, disc image, or a human). Releases stay paused.
 Next: task 1.1 and task 2.1 (independent).
 
 ### 2026-10-10 task 2.1: symbol map fetch and verify
@@ -114,12 +135,18 @@ Next: (human) one iPhone 14 session: install a build with these pins, launch
   re-measure the desktop noise floor on a quiet Mac and add the plaza and
   effects routes.
 
-### 2026-10-07 plan: agent entry points
+### 2026-10-11 research pass 1: SMS Launcher and sms-pc-port
 Result: done
-Pins: unchanged
+Pins: SunPad eeaa38d; read SMS Launcher b460678 (v0.1.57), sms-pc-port
+  a8669e0, decompilation 967436b
 Checkpoints: documentation only
-Evidence: AGENTS.md, CLAUDE.md, plan "Start here" section
-Notes: AGENTS.md now points agents to the plan; CLAUDE.md imports AGENTS.md so
-  Claude-based agents get the same instructions. The status table marks what
-  each task needs (source only, disc image, or a human). Releases stay paused.
-Next: task 1.1 and task 2.1 (independent).
+Evidence: [research loop](RESEARCH-LOOP.md), with the inventory and source rules
+Notes: SMS Launcher is MIT; sms-pc-port still has no license and still needs
+  Rosetta 2 on Apple silicon, so the review's conclusions stand. Players get
+  more there on PCs: 60/120 FPS, HD textures, graphics options, save import and
+  backups, rumble, camera options. SunPad already has widescreen, render
+  scale, an FPS counter, button and touch remapping, and a shareable diagnostic
+  report. Saves sit in Library/Application Support, out of reach of Files.
+  Promoted 10.1 save import and export, 10.2 iPhone and iPad rumble, 10.3
+  invert camera up/down. Added findings to 7.1 and 8.1 and five ideas.
+Next: tasks 10.1-10.3 can start now alongside 1.1 and 2.1.
