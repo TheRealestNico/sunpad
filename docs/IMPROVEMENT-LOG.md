@@ -79,3 +79,18 @@ Notes: SMS Launcher is MIT; sms-pc-port still has no license and still needs
   Promoted 10.1 save import and export, 10.2 iPhone and iPad rumble, 10.3
   invert camera up/down. Added findings to 7.1 and 8.1 and five ideas.
 Next: tasks 10.1-10.3 can start now alongside 1.1 and 2.1.
+
+### 2026-10-11 task 10.3: invert camera up and down
+Result: in progress (code landed; C5 pending)
+Pins: SunPad 48f420a, ModernGekko 8f49c55, RecompCore da96175, DolRecomp fa0cf61
+Checkpoints: C1 pass (input pipe encoder regression covers vertical inversion
+  alone and with the horizontal option, and checks the main stick is
+  unchanged; check-repository.sh); C5 pending
+Evidence: this PR
+Notes: New "Invert C-stick Up/Down" switch in Touch Control Settings, beside
+  "Modern C-stick L/R", off by default, saved as SunPadInvertCStickVertical and
+  applied in SunPadInputPipeEncoder, so touch and controllers match. It applies
+  at once, like the horizontal option. Apple TV has no switch for either axis
+  and is unchanged.
+Next: human C5 on the iPad: turn the switch on and off with a controller and
+  with touch, and confirm only camera up/down reverses.
