@@ -106,6 +106,14 @@
     [[NSUserDefaults standardUserDefaults] setBool:value forKey:@"SunPadModernCStickHorizontal"];
 }
 
+- (BOOL)invertCStickVertical {
+    return [[NSUserDefaults standardUserDefaults] boolForKey:@"SunPadInvertCStickVertical"];
+}
+
+- (void)setInvertCStickVertical:(BOOL)value {
+    [[NSUserDefaults standardUserDefaults] setBool:value forKey:@"SunPadInvertCStickVertical"];
+}
+
 - (CGFloat)controlOpacity {
     NSNumber *value = [[NSUserDefaults standardUserDefaults] objectForKey:@"SunPadControlOpacity"];
     if (value == nil)
