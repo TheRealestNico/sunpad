@@ -10,6 +10,8 @@
 - **SunPad baseline:** `c77dd61` on `main`
 - **Method:** source and documentation review. The port was not built or run,
   and no SunPad device build was made for this review.
+- **Later findings:** recorded by the [research loop](RESEARCH-LOOP.md#passes),
+  starting with pass 1 at `a8669e0` (2026-10-11).
 
 SunPad uses sms-pc-port as a research reference. It is a different kind of
 port, so it cannot be merged into SunPad, but its documentation and code
