@@ -42,9 +42,27 @@ specific request.
 - Leave the repositories with no unpushed work. If a human step is next, write
   exactly what the human needs to do in the log entry's `Next:` line.
 
-**These tasks can start immediately:** 1.1 (save fault test, RecompCore), 2.1
-(symbol map script, SunPad) and the pass 10 player features 10.1-10.3 (SunPad
-app code, with a device session at the end). None depends on another.
+**What is next (2026-10-11).** The source-only work in passes 1 and 10 is on
+`main`. What remains needs a person and the iPad, and one session covers all
+of it. Build and install in place with the [device session
+protocol](#device-session-protocol) (back up and hash saves first), then:
+
+1. **10.3:** in Touch Control Settings turn on Invert C-stick Up/Down; with a
+   controller and with touch, confirm only the camera's up/down reverses.
+2. **10.2:** connect a controller with haptics (DualSense or Xbox), turn on
+   Controls → Controller Rumble, take damage and ground-pound, background and
+   return, and turn rumble off mid-rumble.
+3. **10.1:** Export Saves and compare the exported file's hash with the card
+   file from the backup; import a Dolphin GMSE01 `.gci`, reopen SunPad,
+   confirm it loads in game and that Files → SunPad → Save Backups holds the
+   previous save; restore by importing that backup.
+4. **1.3 and 1.4:** save in game, background SunPad and terminate it from
+   Xcode or `devicectl` within a second, relaunch, and confirm the save
+   loads. Check the runtime log for `GCI restored from backup`.
+
+Record one log entry per task with the verdict and save hashes. Source-only
+work that can still start: none in passes 1 and 10; pass 2's device baseline
+(2.6) gates passes 3-6.
 
 When asked to compare SunPad with another Sunshine project or to look for
 features to learn from, run the [research loop](RESEARCH-LOOP.md) instead.
