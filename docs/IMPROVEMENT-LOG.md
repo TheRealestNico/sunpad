@@ -185,3 +185,44 @@ Notes: New "Invert C-stick Up/Down" switch in Touch Control Settings, beside
   and is unchanged.
 Next: human C5 on the iPad: turn the switch on and off with a controller and
   with touch, and confirm only camera up/down reverses.
+
+### 2026-10-11 task 10.2: controller rumble on iPhone and iPad
+Result: in progress (code landed; C5 pending)
+Pins: SunPad 48f420a (base), ModernGekko 9fec016, RecompCore 8579284, DolRecomp fa0cf61
+Checkpoints: C1 pass (controller rumble regression and wiring checks; changed
+  iOS sources type-check against the iOS Simulator SDK; RecompCore GCPad.cpp
+  type-checks for iOS Simulator and macOS; check-repository.sh); C5 pending
+Evidence: chrissotraidis/RecompCore#24, chrissotraidis/ModernGekko#2, this PR
+Notes: The game's motor commands reach Pad::Rumble through the standard
+  controller device, but SunPad's pipe input has no outputs. RecompCore now
+  calls a weakly imported SunPadSetRumble for pad 0 on iOS and iPadOS only,
+  as the tvOS lane already does with SunPadTVSetRumble. The app's
+  SunPadControllerRumble follows player one from controller reconciliation,
+  starts the Core Haptics engine before creating its player, and rebuilds the
+  engine after iOS stops or resets it. The emulation thread only reads atomic
+  flags. Controls → Controller Rumble is off by default. The Apple TV app keeps
+  its own rumble code; adopting the shared class there is a follow-up.
+Next: human C5 on the iPad with a haptics controller (DualSense or Xbox):
+  turn rumble on, take damage and ground-pound, background and return, and
+  turn it off mid-rumble; confirm rumble starts and stops with the game.
+
+### 2026-10-11 tasks 1.1-1.3: save fault test, atomic writes, backup and repair
+Result: 1.1 and 1.2 done; 1.3 in progress (desktop save and reload pending)
+Pins: ModernGekko fa822d4, RecompCore eaa21f0, DolRecomp fa0cf61
+Checkpoints: C1 pass (RecompCore unit suite, 1,037 tests on an arm64 Mac,
+  including six new GCMemcardDirectoryTest cases; check-repository.sh)
+Evidence: chrissotraidis/RecompCore#25, chrissotraidis/ModernGekko#3, this PR
+Notes: The GCI write moved into Memcard::WriteGCIFile with a test-only
+  stop_after_blocks option. The fault test stops a second write after each
+  block and reloads the folder through GCMemcardDirectory. On the in-place
+  write it failed for the right reason (every interrupted write left no save).
+  Fix: write <file>.tmp, flush, File::RenameSync over the save. Before the
+  rename a complete current save is copied to <file>.bak; at load a short
+  .gci with a complete .bak moves to <file>.damaged and is restored, with one
+  warning "GCI restored from backup: <name>". A damaged file is never kept as
+  the backup, and a leftover .tmp is removed after its save loads. The header
+  write is still compiled out (_WRITE_MC_HEADER), so 1.2's header part is
+  unchanged. SunPad's save export ignores .bak, .tmp and .damaged files.
+Next: 1.3 needs a desktop save and reload with the game; then task 1.4's
+  device session (terminate during the flush window, relaunch, confirm the
+  save loads), after which known issue 22 can be marked fixed.

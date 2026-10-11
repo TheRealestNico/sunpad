@@ -42,9 +42,27 @@ specific request.
 - Leave the repositories with no unpushed work. If a human step is next, write
   exactly what the human needs to do in the log entry's `Next:` line.
 
-**These tasks can start immediately:** 1.1 (save fault test, RecompCore), 2.1
-(symbol map script, SunPad) and the pass 10 player features 10.1-10.3 (SunPad
-app code, with a device session at the end). None depends on another.
+**What is next (2026-10-11).** The source-only work in passes 1 and 10 is on
+`main`. What remains needs a person and the iPad, and one session covers all
+of it. Build and install in place with the [device session
+protocol](#device-session-protocol) (back up and hash saves first), then:
+
+1. **10.3:** in Touch Control Settings turn on Invert C-stick Up/Down; with a
+   controller and with touch, confirm only the camera's up/down reverses.
+2. **10.2:** connect a controller with haptics (DualSense or Xbox), turn on
+   Controls → Controller Rumble, take damage and ground-pound, background and
+   return, and turn rumble off mid-rumble.
+3. **10.1:** Export Saves and compare the exported file's hash with the card
+   file from the backup; import a Dolphin GMSE01 `.gci`, reopen SunPad,
+   confirm it loads in game and that Files → SunPad → Save Backups holds the
+   previous save; restore by importing that backup.
+4. **1.3 and 1.4:** save in game, background SunPad and terminate it from
+   Xcode or `devicectl` within a second, relaunch, and confirm the save
+   loads. Check the runtime log for `GCI restored from backup`.
+
+Record one log entry per task with the verdict and save hashes. Source-only
+work that can still start: none in passes 1 and 10; pass 2's device baseline
+(2.6) gates passes 3-6.
 
 When asked to compare SunPad with another Sunshine project or to look for
 features to learn from, run the [research loop](RESEARCH-LOOP.md) instead.
@@ -302,9 +320,9 @@ human for a device session or a hands-on verdict.
 
 | Task | Title | Status | Needs | Inputs |
 | --- | --- | --- | --- | --- |
-| 1.1 | Save fault-injection test | ready | none | S |
-| 1.2 | Atomic GCI and header writes | ready | 1.1 | S |
-| 1.3 | Last-good backup and load repair | ready | 1.2 | S |
+| 1.1 | Save fault-injection test | done | none | S |
+| 1.2 | Atomic GCI and header writes | done | 1.1 | S |
+| 1.3 | Last-good backup and load repair | in progress (desktop save and reload pending) | 1.2 | S |
 | 1.4 | Pin and device save session | ready | 1.3 | D, H |
 | 2.1 | Symbol map fetch and verify | done | none | S (fixture); D for the real hash check |
 | 2.2 | Profile symbolizer | done | 2.1 | S |
@@ -328,7 +346,7 @@ human for a device session or a hands-on verdict.
 | 8.2 | 60 FPS mod | ready | 8.1 | D, H |
 | 9.1 | Widescreen polish | ready | 8.2 or human approval | D, H |
 | 10.1 | Save import and export | in progress (code landed; C5 pending) | none | S, H |
-| 10.2 | Controller rumble on iPhone and iPad | ready | none | S, H |
+| 10.2 | Controller rumble on iPhone and iPad | in progress (code landed; C5 pending) | none | S, H |
 | 10.3 | Invert camera up and down | in progress (code landed; C5 pending) | none | S, H |
 
 ## Pass 1: save durability
@@ -719,6 +737,8 @@ call on the Apple lane in its owning fork, and move the Core Haptics player into
 switch under Controls, off until C5 passes; the default is a human decision.
 Gates: C1; C5 with a controller that has haptics, covering damage and other
 moments that rumble on the GameCube.
+The Apple TV app keeps its own working rumble code for now; moving it onto
+the shared class is a follow-up once Apple TV has hardware acceptance.
 
 **Task 10.3: invert camera up and down (1-2 days).** SunPad offers only
 "Modern C-stick L/R". Add "Invert C-stick Up/Down" beside it, off by default,
