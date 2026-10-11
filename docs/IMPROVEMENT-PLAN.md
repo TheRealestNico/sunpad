@@ -329,7 +329,7 @@ human for a device session or a hands-on verdict.
 | 9.1 | Widescreen polish | ready | 8.2 or human approval | D, H |
 | 10.1 | Save import and export | ready | none | S, H |
 | 10.2 | Controller rumble on iPhone and iPad | ready | none | S, H |
-| 10.3 | Invert camera up and down | ready | none | S, H |
+| 10.3 | Invert camera up and down | in progress (code landed; C5 pending) | none | S, H |
 
 ## Pass 1: save durability
 
