@@ -116,6 +116,13 @@ headlessly for verification.
   both touch and physical controllers, leaving vertical zoom unchanged. The
   separate **Invert C-stick Up/Down** setting, off by default, reverses only
   the vertical axis. Both apply immediately.
+  **Controls → Controller Rumble** (on `main`, not yet in a release; off by
+  default) plays the game's rumble on player one's controller through Core
+  Haptics. RecompCore's `Pad::Rumble` calls the app's `SunPadSetRumble` for
+  pad 0; controllers without haptics, or rumble turned off, fall back to
+  Dolphin's own output, which does nothing for SunPad's input pipe. iOS stops
+  haptics in the background, and SunPad restarts them on the next controller
+  check.
 - SunPad writes low-frequency boot, display, controller, lifecycle,
   memory-warning, input-pipe, runtime-warning/error, screenshot-marker, and
   runtime-exit breadcrumbs to both the unified device log and

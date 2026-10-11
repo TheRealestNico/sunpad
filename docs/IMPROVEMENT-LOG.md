@@ -94,3 +94,23 @@ Notes: New "Invert C-stick Up/Down" switch in Touch Control Settings, beside
   and is unchanged.
 Next: human C5 on the iPad: turn the switch on and off with a controller and
   with touch, and confirm only camera up/down reverses.
+
+### 2026-10-11 task 10.2: controller rumble on iPhone and iPad
+Result: in progress (code landed; C5 pending)
+Pins: SunPad 48f420a (base), ModernGekko 9fec016, RecompCore 8579284, DolRecomp fa0cf61
+Checkpoints: C1 pass (controller rumble regression and wiring checks; changed
+  iOS sources type-check against the iOS Simulator SDK; RecompCore GCPad.cpp
+  type-checks for iOS Simulator and macOS; check-repository.sh); C5 pending
+Evidence: chrissotraidis/RecompCore#24, chrissotraidis/ModernGekko#2, this PR
+Notes: The game's motor commands reach Pad::Rumble through the standard
+  controller device, but SunPad's pipe input has no outputs. RecompCore now
+  calls a weakly imported SunPadSetRumble for pad 0 on iOS and iPadOS only,
+  as the tvOS lane already does with SunPadTVSetRumble. The app's
+  SunPadControllerRumble follows player one from controller reconciliation,
+  starts the Core Haptics engine before creating its player, and rebuilds the
+  engine after iOS stops or resets it. The emulation thread only reads atomic
+  flags. Controls → Controller Rumble is off by default. The Apple TV app keeps
+  its own rumble code; adopting the shared class there is a follow-up.
+Next: human C5 on the iPad with a haptics controller (DualSense or Xbox):
+  turn rumble on, take damage and ground-pound, background and return, and
+  turn it off mid-rumble; confirm rumble starts and stops with the game.

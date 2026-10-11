@@ -1,6 +1,7 @@
 #import "SunPadGameOverlay.h"
 
 #import "SunPadDiagnostics.h"
+#import "SunPadControllerRumble.h"
 #import "SunPadInputMixer.h"
 #import "SunPadSettings.h"
 
@@ -603,6 +604,20 @@ static CGFloat SunPadDefaultSizeScaleForControl(UIView *view, NSString *identifi
         [weakSelf reportProblem];
     }];
 
+    UIAction *rumbleAction =
+        [UIAction actionWithTitle:@"Controller Rumble"
+                            image:[UIImage systemImageNamed:@"waveform"]
+                       identifier:nil handler:^(__kindof UIAction *action) {
+        (void)action;
+        SunPadSettings *currentSettings = [SunPadSettings sharedSettings];
+        currentSettings.controllerRumble = !currentSettings.controllerRumble;
+        [currentSettings synchronize];
+        [SunPadControllerRumble sharedRumble].allowed = currentSettings.controllerRumble;
+        [weakSelf refreshMenuButton];
+    }];
+    rumbleAction.state = [SunPadSettings sharedSettings].controllerRumble ?
+        UIMenuElementStateOn : UIMenuElementStateOff;
+
     UIMenu *controlsMenu = [UIMenu menuWithTitle:@"Controls"
                                            image:[UIImage systemImageNamed:@"gamecontroller"]
                                       identifier:nil
@@ -620,6 +635,7 @@ static CGFloat SunPadDefaultSizeScaleForControl(UIView *view, NSString *identifi
             (void)action;
             [weakSelf toggleSettingsPanel];
         }],
+        rumbleAction,
     ]];
 
     return [UIMenu menuWithTitle:@"SunPad" children:@[

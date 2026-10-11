@@ -312,7 +312,7 @@ human for a device session or a hands-on verdict.
 | 8.2 | 60 FPS mod | ready | 8.1 | D, H |
 | 9.1 | Widescreen polish | ready | 8.2 or human approval | D, H |
 | 10.1 | Save import and export | ready | none | S, H |
-| 10.2 | Controller rumble on iPhone and iPad | ready | none | S, H |
+| 10.2 | Controller rumble on iPhone and iPad | in progress (code landed; C5 pending) | none | S, H |
 | 10.3 | Invert camera up and down | in progress (code landed; C5 pending) | none | S, H |
 
 ## Pass 1: save durability
@@ -701,6 +701,8 @@ call on the Apple lane in its owning fork, and move the Core Haptics player into
 switch under Controls, off until C5 passes; the default is a human decision.
 Gates: C1; C5 with a controller that has haptics, covering damage and other
 moments that rumble on the GameCube.
+The Apple TV app keeps its own working rumble code for now; moving it onto
+the shared class is a follow-up once Apple TV has hardware acceptance.
 
 **Task 10.3: invert camera up and down (1-2 days).** SunPad offers only
 "Modern C-stick L/R". Add "Invert C-stick Up/Down" beside it, off by default,

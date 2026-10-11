@@ -2,6 +2,7 @@
 
 #import "SunPadCoreHost.h"
 #import "SunPadControllerMapping.h"
+#import "SunPadControllerRumble.h"
 #import "SunPadControllerSlots.h"
 #import "SunPadDiagnostics.h"
 #import "SunPadDiscExtractor.h"
@@ -524,6 +525,7 @@ static NSUInteger SunPadRegularFileCount(NSString *directory) {
 }
 
 - (void)observeControllers {
+    [SunPadControllerRumble sharedRumble].allowed = [SunPadSettings sharedSettings].controllerRumble;
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(controllerDidConnect:)
                                                  name:GCControllerDidConnectNotification
@@ -679,6 +681,7 @@ static NSUInteger SunPadRegularFileCount(NSString *directory) {
     }
 
     GCController *playerOne = [self controllerForPlayerSlot:0];
+    [[SunPadControllerRumble sharedRumble] useController:playerOne];
     if (playerOne != nil)
         [self publishInputFromController:playerOne gamepad:playerOne.extendedGamepad];
 }
@@ -695,6 +698,7 @@ static NSUInteger SunPadRegularFileCount(NSString *directory) {
     SunPadSettings *settings = [SunPadSettings sharedSettings];
     [_coreHost setRenderScale:settings.renderScale];
     [_coreHost setAspectRatioMode:settings.aspectRatioMode];
+    [SunPadControllerRumble sharedRumble].allowed = settings.controllerRumble;
     [self updateFPSLabel];
 }
 

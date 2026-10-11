@@ -43,6 +43,8 @@ typedef NS_ENUM(NSInteger, SunPadAspectRatioMode) {
 @property(nonatomic, assign) BOOL modernCStickHorizontal;
 /* Reverses only the C-stick vertical axis (camera height and zoom). */
 @property(nonatomic, assign) BOOL invertCStickVertical;
+/* Plays the game's rumble on player one's controller. Off by default. */
+@property(nonatomic, assign) BOOL controllerRumble;
 @property(nonatomic, assign) CGFloat controlOpacity;   // 0.25..1
 @property(nonatomic, assign) CGFloat controlSizeScale; // 0.70..1.35
 @property(nonatomic, assign) BOOL editingControlLayout;
