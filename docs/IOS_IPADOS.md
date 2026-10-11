@@ -130,7 +130,9 @@ headlessly for verification.
   and removal clears held player-1 buttons, sticks, and triggers. Touch controls
   auto-hide when a controller is connected. The persisted
   **Modern C-stick L/R** setting reverses only the horizontal C-stick axis for
-  both touch and physical controllers, leaving vertical zoom unchanged.
+  both touch and physical controllers, leaving vertical zoom unchanged. The
+  separate **Invert C-stick Up/Down** setting, off by default, reverses only
+  the vertical axis. Both apply immediately.
 - SunPad writes low-frequency boot, display, controller, lifecycle,
   memory-warning, input-pipe, runtime-warning/error, screenshot-marker, and
   runtime-exit breadcrumbs to both the unified device log and
