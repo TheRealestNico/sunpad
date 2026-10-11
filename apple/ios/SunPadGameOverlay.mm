@@ -472,6 +472,18 @@ static CGFloat SunPadDefaultSizeScaleForControl(UIView *view, NSString *identifi
             (void)action;
             [weakSelf.delegate gameOverlayRequestsGameDataFolderImport:weakSelf];
         }],
+        [UIAction actionWithTitle:@"Import Dolphin Save (.gci)…"
+                            image:[UIImage systemImageNamed:@"square.and.arrow.down"]
+                       identifier:nil handler:^(__kindof UIAction *action) {
+            (void)action;
+            [weakSelf.delegate gameOverlayRequestsSaveImport:weakSelf];
+        }],
+        [UIAction actionWithTitle:@"Export Saves…"
+                            image:[UIImage systemImageNamed:@"square.and.arrow.up"]
+                       identifier:nil handler:^(__kindof UIAction *action) {
+            (void)action;
+            [weakSelf exportSaves];
+        }],
         [UIAction actionWithTitle:@"Remove Stored Game Data"
                             image:[UIImage systemImageNamed:@"trash"]
                        identifier:nil handler:^(__kindof UIAction *action) {
@@ -646,6 +658,30 @@ static CGFloat SunPadDefaultSizeScaleForControl(UIView *view, NSString *identifi
         dataMenu,
         reportProblemAction,
     ]];
+}
+
+- (void)exportSaves {
+    UIViewController *presenter = self.window.rootViewController;
+    NSError *error = nil;
+    NSArray<NSURL *> *saves = [self.delegate gameOverlayExportSaves:self error:&error];
+    if (saves == nil) {
+        UIAlertController *alert =
+            [UIAlertController alertControllerWithTitle:@"No Saves Exported"
+                                                message:error.localizedDescription
+                                         preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK"
+                                                  style:UIAlertActionStyleDefault
+                                                handler:nil]];
+        [presenter presentViewController:alert animated:YES completion:nil];
+        return;
+    }
+    UIActivityViewController *share =
+        [[UIActivityViewController alloc] initWithActivityItems:saves
+                                         applicationActivities:nil];
+    UIPopoverPresentationController *popover = share.popoverPresentationController;
+    popover.sourceView = _menuButton;
+    popover.sourceRect = _menuButton.bounds;
+    [presenter presentViewController:share animated:YES completion:nil];
 }
 
 - (void)reportProblem {

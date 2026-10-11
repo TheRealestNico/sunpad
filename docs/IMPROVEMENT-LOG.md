@@ -151,6 +151,26 @@ Notes: SMS Launcher is MIT; sms-pc-port still has no license and still needs
   invert camera up/down. Added findings to 7.1 and 8.1 and five ideas.
 Next: tasks 10.1-10.3 can start now alongside 1.1 and 2.1.
 
+### 2026-10-11 task 10.1: save import and export
+Result: in progress (code landed; C5 pending)
+Pins: SunPad 48f420a, ModernGekko 8f49c55, RecompCore da96175, DolRecomp fa0cf61
+Checkpoints: C1 pass (new save transfer regression with synthetic saves;
+  changed iOS sources type-check against the iOS Simulator SDK;
+  check-repository.sh); C5 pending
+Evidence: this PR
+Notes: Rules come from RecompCore's GCMemcardDirectory and GCIFile: Dolphin
+  loads every .gci with the current game code, refuses a second save with the
+  same maker, game code and internal filename, and requires 64 bytes plus
+  8 KiB per block. SunPad's user folder makes the card
+  Application Support/SunPad/GC/USA/Card A. Imports are staged and applied in
+  startGameIfProvisioned before the core starts, after a full card backup.
+  Backups go to Documents/Save Backups (Files-visible), a change from the task
+  card, so players can restore them. Apple TV is unchanged.
+Next: human C5 on the iPad, following the device session protocol: export the
+  current save and compare its hash with the card file; import a Dolphin GMSE01
+  .gci, reopen, confirm it loads in game, then save and export again and load
+  the export in Dolphin; confirm the backup folder holds the previous save.
+
 ### 2026-10-11 task 10.3: invert camera up and down
 Result: in progress (code landed; C5 pending)
 Pins: SunPad 48f420a, ModernGekko 8f49c55, RecompCore da96175, DolRecomp fa0cf61

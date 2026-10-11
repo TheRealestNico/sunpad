@@ -88,6 +88,23 @@ fresh acceptance run:
    Stored Game Data** stops the runtime and deletes the retained image and
    extracted tree; saves are stored separately and are not removed.
 
+**Save import and export** (on `main`, not yet in a release). Saves live in
+`Library/Application Support/SunPad/GC/USA/Card A`, which Files cannot see.
+
+- **Game Data & Saves → Export Saves…** copies each valid GMSE01 `.gci` to a
+  temporary folder and opens the share sheet (Save to Files, AirDrop, and so
+  on). A save the game is writing at that moment is skipped.
+- **Game Data & Saves → Import Dolphin Save (.gci)…** accepts a GMSE01 save
+  exported from Dolphin's Memory Card Manager or from SunPad. It checks the
+  game code, maker code and size the way Dolphin's GCI folder does, then stages
+  the file. The import is applied the next time the game starts, before the
+  runtime opens the memory card: SunPad copies the whole card folder to
+  **Files → On My iPhone/iPad → SunPad → Save Backups → <date> before import**,
+  removes any save with the same internal name, and renames the imported file
+  into place. While the game is running, the player is asked to close and
+  reopen SunPad. To restore a backup, import a `.gci` from that folder.
+- The selected file is never modified, and SunPad never deletes a backup.
+
 Verified: the on-device extraction produces the same 174-file tree as the
 desktop extraction, and the game boots from the imported image and responds to
 input. The recompiled module still comes from the Mac toolchain (iOS has no C
