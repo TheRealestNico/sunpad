@@ -184,6 +184,10 @@ Last updated: 2026-10-07
     [pass 1](IMPROVEMENT-PLAN.md#pass-1-save-durability) lands, back up saves
     before risky sessions and wait a few seconds after an in-game save before
     leaving the app.
+    The fix is on `main` but not in a release or confirmed on a device:
+    RecompCore now writes each save to a temporary file and renames it into
+    place, keeps the previous save as `<file>.bak`, and restores a short save
+    from that backup at load.
 
 ## tvOS (experimental)
 

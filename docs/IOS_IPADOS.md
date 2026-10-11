@@ -105,7 +105,9 @@ headlessly for verification.
   readback and a real audio-interruption replay remain acceptance gates.
   The flush itself rewrites each save in place, so a termination mid-write can
   hide the save ([known issue 22](KNOWN_ISSUES.md)); atomic writes are
-  [pass 1](IMPROVEMENT-PLAN.md#pass-1-save-durability) of the plan.
+  [pass 1](IMPROVEMENT-PLAN.md#pass-1-save-durability) of the plan. They are on
+  `main` (atomic replace, one `.bak` generation, load-time repair) and await
+  the task 1.4 device session.
 - The app frontend uses Apple's GameController framework. Current controllers
   are enumerated and reconciled on notifications, periodically while active,
   and after foreground resume. Valid instances retain their player slots,
