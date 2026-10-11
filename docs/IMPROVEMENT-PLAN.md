@@ -327,7 +327,7 @@ human for a device session or a hands-on verdict.
 | 8.1 | 60 FPS timing audit | ready | 4.1, headroom gate | S |
 | 8.2 | 60 FPS mod | ready | 8.1 | D, H |
 | 9.1 | Widescreen polish | ready | 8.2 or human approval | D, H |
-| 10.1 | Save import and export | ready | none | S, H |
+| 10.1 | Save import and export | in progress (code landed; C5 pending) | none | S, H |
 | 10.2 | Controller rumble on iPhone and iPad | ready | none | S, H |
 | 10.3 | Invert camera up and down | in progress (code landed; C5 pending) | none | S, H |
 
@@ -685,6 +685,8 @@ its own app code without new performance headroom.
 so players cannot back up a save, bring one from Dolphin or take theirs to
 another device. Dolphin's GCI-folder backend, which SunPad uses, keeps each save
 as a `.gci` file in the layout Dolphin's Memory Card Manager exports.
+Backups go to `Documents/Save Backups` so players can find them in Files;
+under `Library` they would be out of reach.
 
 1. Add "Import Dolphin Save (.gci)…" and "Export Saves…" to the
    Game Data & Saves menu. Recheck the menu's other actions afterwards.

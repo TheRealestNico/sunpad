@@ -25,6 +25,7 @@ plutil -lint apple/ios/Info.plist apple/tvos/Info.plist apple/tvos/PrivacyInfo.x
 ./scripts/check-markdown-links.py
 
 ./tests/test-input-pipe-encoder.sh
+./tests/test-save-transfer.sh
 ./tests/test-controller-mapping.sh
 ./tests/test-controller-slots.sh
 ./tests/test-experimental-60fps-config.sh
