@@ -266,3 +266,24 @@ Notes: Local macOS builds looked for Sys at the app root while SunPad packages
 Next: complete clean iOS/tvOS CI for this PR; with a person, perform the actual
   desktop save/reload check before marking 1.3 done, then the backed-up device
   session for 1.4. No new release or performance claim.
+
+### 2026-10-13 task 10.1: preserve saves when import cannot finish
+Result: failed replacement preserves the active save; hands-on checks pending
+Pins: SunPad main 1f2bc05 plus the app/helper changes; runtime pins unchanged
+Checkpoints: synthetic filesystem-failure regressions and source suite pass;
+  clean Apple CI remains required before merge
+Evidence: SunPadSaveTransferTests; independent review of startup and retry paths
+Notes: Import previously deleted matching saves before the final file move.
+  An injected move failure reproduced the missing active save, although its
+  dated backup survived. Import now completes the backup and atomically writes
+  the replacement before deleting alternate copies. Enumeration, backup and
+  commit failures preserve the original; mixed-case destination names are kept
+  safely. Cleanup failures keep the import pending, and startup now waits for
+  successful completion before opening the runtime. Otherwise, playing after
+  such a failure could let the next retry replace newer progress. Pending-file
+  removal errors are also reported. Tests use synthetic saves only.
+Next: keep the installed iPhone candidate for the maintainer's deferred basic
+  check. Before the later import/export session, refresh its backup and build
+  the test app from current main; the previously staged app predates this fix.
+  Confirm import, in-game save, export and reload on device before completing
+  10.1. No new release or physical power-loss acceptance is claimed.
