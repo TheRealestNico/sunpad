@@ -241,3 +241,28 @@ Notes: Added public descriptive metadata without a remote schema reference or
   checked; no physical iOS 27 or reporter acceptance is implied.
 Next: refresh draft #57 against main and complete available host checks;
   prepare task 2.6's device measurement without claiming a speedup.
+
+### 2026-10-13 task 1.3 preflight: packaged Mac resource lookup
+Result: startup resource defect fixed; actual save and reload still pending
+Pins: SunPad 4b953bd build inputs; ModernGekko e29496f; RecompCore 7240549;
+  DolRecomp fa0cf61; tvOS lane unchanged
+Checkpoints: C1 pass (source suite; real Common-library CLI and app-bundle
+  lookup tests, with the bundle case failing before the fix; a symlink case
+  also exposed and guards a path-resolution error. All three tests pass;
+  relocated paths with spaces also pass); clean Mac app build pass;
+  strict deep signature, portable linkage and macOS 14 load-command checks pass
+Evidence: RecompCore #35, ModernGekko #4, SunPad #72; private build/startup logs
+Notes: Local macOS builds looked for Sys at the app root while SunPad packages
+  it beside the executable. The fork fix resolves the actual executable path
+  on desktop macOS only, resolving symlinks before locating Sys. A clean SDK 27 package build also exposed the missing
+  HAVE_PIPE2=OFF flag already used by preparation/mobile scripts; the packager
+  now uses the same flag and an empty-directory rebuild succeeds. The packaged
+  runner reports Contents/MacOS/Sys, loads the module without the missing-font
+  error and shuts down normally. A copied save is unchanged. The initial
+  private game probe reached the title/attract demo after a temporary resource
+  workaround, but synthetic keyboard input did not establish save/reload
+  acceptance. The later packaged-runner proof is log-based, not visual or
+  gameplay acceptance. The installed iPhone candidate was not replaced.
+Next: complete clean iOS/tvOS CI for this PR; with a person, perform the actual
+  desktop save/reload check before marking 1.3 done, then the backed-up device
+  session for 1.4. No new release or performance claim.
