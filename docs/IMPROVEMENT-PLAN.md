@@ -328,8 +328,8 @@ human for a device session or a hands-on verdict.
 | 2.1 | Symbol map fetch and verify | done | none | S (fixture); D for the real hash check |
 | 2.2 | Profile symbolizer | done | 2.1 | S |
 | 2.3 | Frame breakdown counters | in progress | none | D |
-| 2.4 | Unlimited-speed desktop benchmark | in progress | none | D |
-| 2.5 | Developer warp and the three routes | in progress | 2.1 | D |
+| 2.4 | Unlimited-speed desktop benchmark | in progress (incomplete runs rejected; timing fields pending) | none | D |
+| 2.5 | Developer warp and the three routes | in progress (pipe connection timeout covered; traversal routes pending) | 2.1 | D |
 | 2.6 | Baseline measurement and ranking | ready | 2.2-2.5 | D, H |
 | 3.1 | Chunk-validation flag for direct calls | ready | 2.6 entry gate | D |
 | 3.2 | Hook and mod bitmap | ready | 3.1 | D |
