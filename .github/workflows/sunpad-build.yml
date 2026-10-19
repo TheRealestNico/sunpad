@@ -1,0 +1,32 @@
+
+name: SunPad Build Environment
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-26
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout SunPad
+        uses: actions/checkout@v4
+
+      - name: Check Mac environment
+        run: |
+          uname -m
+          xcodebuild -version
+          xcrun --sdk iphoneos --show-sdk-version
+
+      - name: Install build tools
+        run: |
+          brew install cmake ninja ripgrep pkg-config
+
+      - name: Bootstrap dependencies
+        run: |
+          ./scripts/bootstrap-dependencies.sh --sources-only
+
+      - name: Check repository
+        run: |
+          ./scripts/check-repository.sh
