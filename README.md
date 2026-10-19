@@ -53,8 +53,9 @@ game code. On an Apple silicon Mac with Xcode, download
 disc image and click **Make my copy**. PadMint translates the
 game from your disc, adds it to the published app and saves your SunPad IPA in your Downloads
 folder; install it with AltStore Classic, SideStore or Sideloadly. The IPA it makes contains code
-translated from your disc: keep it for yourself. Apple silicon Macs can also
-[build and run locally](docs/MACOS.md).
+translated from your disc: keep it for yourself. With PadMint 0.5.5 or newer you can also choose
+**This Mac**: PadMint builds `SunPad.app` from your disc and saves it as a zip; move it to Applications.
+To build it by hand, see [build and run locally](docs/MACOS.md).
 
 Apple TV requires Mac-side game-data staging and an Extended Gamepad. Its storage
 is purgeable, so [back up your saves](docs/TVOS.md) before replacing the app.
