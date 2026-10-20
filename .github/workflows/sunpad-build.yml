@@ -1,5 +1,5 @@
 
-name: SunPad Build Environment
+name: Build SunPad Game Module
 
 on:
   workflow_dispatch:
@@ -7,26 +7,48 @@ on:
 jobs:
   build:
     runs-on: macos-26
-    timeout-minutes: 60
+    timeout-minutes: 180
+
+    env:
+      CMAKE_BUILD_PARALLEL_LEVEL: "2"
 
     steps:
       - name: Checkout SunPad
         uses: actions/checkout@v4
 
-      - name: Check Mac environment
+      - name: Install dependencies
         run: |
-          uname -m
-          xcodebuild -version
-          xcrun --sdk iphoneos --show-sdk-version
+          brew install cmake ninja pkg-config ripgrep
 
-      - name: Install build tools
+      - name: Download game ISO
+        env:
+          ISO_URL: ${{ secrets.ISO_URL }}
         run: |
-          brew install cmake ninja ripgrep pkg-config
+          test -n "$ISO_URL"
+          curl --fail --location --retry 3 \
+            --silent --show-error \
+            --output "$RUNNER_TEMP/GMSE01.iso" \
+            "$ISO_URL"
+          ls -lh "$RUNNER_TEMP/GMSE01.iso"
 
-      - name: Bootstrap dependencies
+      - name: Verify game revision
         run: |
-          ./scripts/bootstrap-dependencies.sh --sources-only
+          echo "Downloaded ISO SHA-256:"
+          shasum -a 256 "$RUNNER_TEMP/GMSE01.iso"
 
-      - name: Check repository
+      - name: Prepare game
         run: |
-          ./scripts/check-repository.sh
+          ./scripts/prepare-game.sh \
+            "$RUNNER_TEMP/GMSE01.iso"
+
+      - name: Compile iOS module
+        run: |
+          ./scripts/ios-build-core-device.sh
+
+      - name: Upload compiled module
+        uses: actions/upload-artifact@v4
+        with:
+          name: SunPad-Compiled-Module
+          path: build/ios-module-device/gGMSE01_recomp.dylib
+          if-no-files-found: error
+          retention-days: 1
